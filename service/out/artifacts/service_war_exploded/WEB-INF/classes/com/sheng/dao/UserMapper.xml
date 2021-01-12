@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sheng.dao.UserMapper">
+    <resultMap id="usermap" type="users">
+        <result column="create_time" property="createTimeCuo"/>
+        <result column="mg_state" property="mgState"/>
+        <result column="role_name" property="roleName"/>
+    </resultMap>
+
+<!--    查询所有用户-->
+    <select id="queryUserByQuery" parameterType="userLike" resultMap="usermap">
+        select * from user
+        <where>
+            <if test="query != null">
+                and username like "%" #{query} "%"
+            </if>
+        </where>
+        limit #{startIndex},#{pageSize};
+    </select>
+    
+<!--    查询记录时-->
+    <select id="queryTotalByQuery" parameterType="string" resultType="int">
+        select count(*) from user
+        <where>
+            <if test="query != null">
+                and username like "%" #{query} "%"
+            </if>
+        </where>
+    </select>
+    
+<!--    根据id删除指定用户-->
+    <delete id="DeleteUser" parameterType="int">
+        delete from user where id = #{id};
+    </delete>
+
+<!--    根据id修改用户状态-->
+    <update id="updateType" parameterType="map">
+        update user set mg_state = #{type} where id = #{id};
+    </update>
+
+<!--    添加用户-->
+    <insert id="addUser" parameterType="user">
+        insert into user(`username`,`password`,`mobile`,`email`)
+        values( #{username} , #{password} , #{mobile} , #{email} );
+    </insert>
+
+<!--    修改用户信息-->
+    <update id="updateUser" parameterType="user">
+        update user set email = #{email}, mobile = #{mobile} where id = #{id}
+    </update>
+
+<!--    修改用户身份-->
+    <update id="updateRoleName" parameterType="user">
+        update user set role_name = #{roleName} where id = #{id}
+    </update>
+</mapper>

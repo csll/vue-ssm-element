@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sheng.dao.RoleMapper">
+
+    <resultMap id="roleMap" type="role" >
+        <id column="role_name" property="roleName"/>
+    </resultMap>
+
+<!--    查询所有角色-->
+    <select id="getRoleList" resultMap="roleMap">
+        SELECT  *  FROM role ORDER  BY  FIELD(role_name,  '超级管理员') DESC;
+    </select>
+
+<!--    添加角色-->
+    <insert id="addRole" parameterType="role">
+        insert into role (role_name, `describe`)
+        values ( #{roleName} , #{describe} );
+    </insert>
+
+<!--    根据角色名称查询-->
+    <select id="queryRoleByName" parameterType="string" resultMap="roleMap">
+        select * from role where role_name = #{roleName}
+    </select>
+
+<!--    根据角色名删除用户-->
+    <delete id="deleteRoleByName" parameterType="string">
+        delete from role where role_name = #{roleName}
+    </delete>
+</mapper>
